@@ -71,7 +71,7 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main() {
-    int n = 100000000, i, d, swap;
+    int n = 100000, i, d, swap;
     List a, aux;
     double time, finish;
     

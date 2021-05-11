@@ -4,5 +4,11 @@ proof:
 compile:
 	gcc -o $(FILE).out -fopenmp $(FILE).c
 
+compile_pg:
+	gcc -o $(FILE).out -fopenmp $(FILE).c -pg
+
+compile_gprof:
+	gprof $(FILE).out gmon.out > analysis_$(FILE).txt
+
 remove:
-	rm *.out
+	rm *.out analysis_*.txt
