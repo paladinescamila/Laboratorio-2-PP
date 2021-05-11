@@ -40,6 +40,8 @@ In this folder was parallelized the mergesort algoritm
     make compile_gprof FILE=parallel
     ```
 
+    When finish the compilation of the above code, you can see the results of the analysis in the file Analysis_(name of file that you had compiled).txt. For the above example that info is located in Analysus_parallel.txt.
+
 ## References
 
 - https://gist.github.com/hackrio1/a11c8499ed68f5df6c30e53d1c3fe076
