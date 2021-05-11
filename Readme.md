@@ -2,7 +2,7 @@
 
 ## Made by
 
-- Karen Camila Paladines
+- Camila Paladines
 - Juan Sebastian Reyes
 
 ## Description
