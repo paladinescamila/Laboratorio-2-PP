@@ -16,11 +16,11 @@
     ```
    An example of how to compile is next:
 
-    ```
+    ```sh
     make compile FILE=parallel
     ```
 4. Next, to visualize the result:
 
-    ```
+    ```sh
     ./parallel.out
     ```
