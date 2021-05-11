@@ -26,9 +26,19 @@ In this folder was parallelized the mergesort algoritm
 4. Next, to visualize the result:
 
     ```sh
-    ./parallel.out
+    make run FILE=paralleL
     ```
+5. If you want to realice an analysis though Gprof, you must continue the next steps.
 
+    ```sh
+    make compile_pg FILE=parallel
+    make run FILE=parallel
+    ```
+    When in your folder exists a file with name gmon.out, you put the next code in the terminal
+
+    ```sh
+    make compile_gprof FILE=parallel
+    ```
 
 ## References
 
