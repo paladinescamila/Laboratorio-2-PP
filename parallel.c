@@ -106,24 +106,21 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    // int n = 100000, i, d, swap;
-    int max = 1000000, iter = (int) max/10;
+    int n = 100000000, i, d, swap;
 
     MPI_Init(&argc, &argv);
 
-    for (int n = iter; n <= max; n+=iter){
-        List a, aux;
-        double time, finish;
-        
-        a = randomList(n);
-        aux = createList(n);
-        
-        time = MPI_Wtime();
-        merge_sort(0, n - 1, a, aux);
-        finish = MPI_Wtime();
+    List a, aux;
+    // double time, finish;
+    
+    a = randomList(n);
+    aux = createList(n);
+    
+    // time = MPI_Wtime();
+    merge_sort(0, n - 1, a, aux);
+    // finish = MPI_Wtime();
 
-        printf("N:%d, %f s\n", n, finish - time);
-    }
+    // printf("N:%d, %f s\n", n, finish - time);
 
     MPI_Finalize();
     
