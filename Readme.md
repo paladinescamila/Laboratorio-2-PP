@@ -28,7 +28,7 @@ In this folder was parallelized the mergesort algoritm
     ```sh
     make run FILE=paralleL
     ```
-5. If you want to realice an analysis though Gprof, you must continue the next steps.
+5. If you want to realice an analysis through Gprof, you must continue the next steps.
 
     ```sh
     make compile_pg FILE=parallel
@@ -41,6 +41,16 @@ In this folder was parallelized the mergesort algoritm
     ```
 
     When finish the compilation of the above code, you can see the results of the analysis in the file Analysis_(name of file that you had compiled).txt. For the above example that info is located in Analysus_parallel.txt.
+
+## Time
+
+If you want visualize the runtime through *time*, you must put before run code the command *time*, the following form:
+
+```sh
+time make run FILE=name of file that you had compiled before
+```
+
+By default, when you run the code, this show the `omp_get_wtime`.
 
 ## References
 
