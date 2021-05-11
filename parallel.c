@@ -1,26 +1,41 @@
 /*
 Name: parallel.c
-Version: 1.3
+Version: 1.5
 
 Made by:
 - Camila Paladines Muñoz
 - Juan Sebastian Reyes Leyton
+
+Source code: https://gist.github.com/hackrio1/a11c8499ed68f5df6c30e53d1c3fe076
 */
 
 #include "parallel.h"
 
 List createList( int n ) {
+    /*
+    Input: The size n of the array that will be created.
+    Description: This function create a List of n positions and return 
+                 that array.
+    Output: The n-array.
+    */
     List ans;
     ans = (List)calloc( n, sizeof(T) );
     return ans;
 }
 
 List randomList( int n ) {
+    /*
+    Input: The size n of the array that will be created.
+    Description: This function create a List of n positions where their values have
+                 random values and return that array.
+    Output: The n-array with random values.
+    */
     List ans;
     ans = (List)calloc( n, sizeof(T) );
 
     srand(time(NULL));
 
+    // Fill the positions with random values
     for(int i = 0; i < n; i++) {
         ans[i] = rand() % (MAX_SIZE + 1);
     }
@@ -29,6 +44,17 @@ List randomList( int n ) {
 }
 
 void merge( int i, int j, int mid, List a, List aux ) {
+    /*
+    Input: The index i, j and mid, the list a and aux.
+    Description: This function realice the process to merge the 
+                 right size of the array (a[mid+1 .. j]) and the 
+                 left size of the array (a[i .. mid]) in the aux 
+                 array, then assign that values in the order obtained
+                 in the aux array
+    Complexity: O(i+j) 
+    Ouput: None
+    */
+
     int pointer_left = i;       // pointer_left points to the beginning of the left sub-array
     int pointer_right = mid + 1;        // pointer_right points to the beginning of the right sub-array
     int k;      // k is the loop counter
@@ -57,6 +83,15 @@ void merge( int i, int j, int mid, List a, List aux ) {
 
 // function to sort the subsection a[i .. j] of the array a[]
 void merge_sort(int i, int j, List a, List aux) {
+    /*
+    Input: The index i and j, and the lists a and aux.
+    Description: This function implemented the divide and conquest
+                 strategy of merge sort algorithm. It consists in 
+                 divide the array a in two middles, both are sorted,
+                 then is merge both middles in the merge function.
+    Complexity: O(n log n)
+    Output: None
+    */
     if (j <= i) {
         return;     // the subsection is empty or a single element
     }

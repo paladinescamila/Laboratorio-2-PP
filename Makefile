@@ -10,5 +10,8 @@ compile_pg:
 compile_gprof:
 	gprof $(FILE).out gmon.out > analysis_$(FILE).txt
 
+run:
+	./$(FILE).out
+
 remove:
 	rm *.out analysis_*.txt
