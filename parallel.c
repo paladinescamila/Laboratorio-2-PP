@@ -106,21 +106,21 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 100000000, i, d, swap;
+    int n = 1000000000, i, d, swap;
 
     MPI_Init(&argc, &argv);
 
     List a, aux;
-    // double time, finish;
+    double start, end;
     
     a = randomList(n);
     aux = createList(n);
     
-    // time = MPI_Wtime();
+    start = MPI_Wtime();
     merge_sort(0, n - 1, a, aux);
-    // finish = MPI_Wtime();
+    end = MPI_Wtime();
 
-    // printf("N:%d, %f s\n", n, finish - time);
+    printf("N:%d, %f s\n", n, end - start);
 
     MPI_Finalize();
     
