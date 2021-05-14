@@ -7,7 +7,7 @@
 
 ## Description
 
-In this folder was parallelized the mergesort algoritm, this algorithm was implemented to based on divide an conquer strategy. This algorithms takes the array, for example **A** and divide this array in two sections, the left and right side, this division is realized in the half of the array. Then, both halfs are calls recusively by the same function, and after those calls both are merge. Finally, when they are merge the result array already is sorted.
+In this folder was parallelized the Merge Sort algoritm, this algorithm was implemented to based on divide an conquer strategy. This algorithms takes the array, for example **A** and divide this array in two sections, the left and right side, this division is realized in the half of the array. Then, both halfs are calls recusively by the same function, and after those calls both are merge. Finally, when they are merge the result array already is sorted.
 
 ### Step 1
 
