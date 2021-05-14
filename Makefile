@@ -2,16 +2,16 @@ proof:
 	echo $1
 
 compile:
-	gcc -o $(FILE).out -fopenmp $(FILE).c
+	mpicc -o $(FILE) $(FILE).c
 
 compile_pg:
-	gcc -o $(FILE).out -fopenmp $(FILE).c -pg
+	mpicc -o $(FILE) $(FILE).c -pg
 
 compile_gprof:
-	gprof $(FILE).out gmon.out > analysis_$(FILE).txt
+	gprof $(FILE) gmon.out > analysis_$(FILE).txt
 
 run:
-	./$(FILE).out
+	mpiexec -n $(NP) ./$(FILE)
 
 remove:
 	rm *.out analysis_*.txt

@@ -40,9 +40,9 @@ void merge_sort(int i, int j, List a, List aux) {
 3. To compile any .c file you must do it of the following form:
 
     ```sh
-    make compile FILE=name_file_without_the_extension
+    make compile FILE=file_name_without_the_extension
     ```
-   An example of how to compile is next:
+    An example of how to compile is next:
 
     ```sh
     make compile FILE=parallel
@@ -50,28 +50,33 @@ void merge_sort(int i, int j, List a, List aux) {
 4. Next, to visualize the result:
 
     ```sh
-    make run FILE=paralleL
+    make run FILE=file_name_without_the_extension NP=number_of_processes
+    ```
+    An example of how to run is next:
+
+    ```sh
+    make run FILE=parallel NP=4
     ```
 5. If you want to realice an analysis through Gprof, you must continue the next steps.
 
     ```sh
     make compile_pg FILE=parallel
-    make run FILE=parallel
+    make run FILE=parallel NP=4
     ```
-    When in your folder exists a file with name gmon.out, you put the next code in the terminal
+    Writing NP = 4 indicates that 4 processes will be created, this number is customizable. When in your folder exists a file with name gmon.out, you put the next code in the terminal:
 
     ```sh
     make compile_gprof FILE=parallel
     ```
 
-    When finish the compilation of the above code, you can see the results of the analysis in the file Analysis_(name of file that you had compiled).txt. For the above example that info is located in Analysus_parallel.txt.
+    When finish the compilation of the above code, you can see the results of the analysis in the file analysis_(name of file that you had compiled).txt. For the above example that info is located in analysis_parallel.txt.
 
 ## Time
 
 If you want visualize the runtime through *time*, you must put before run code the command *time*, the following form:
 
 ```sh
-time make run FILE=name of file that you had compiled before
+time make run FILE=name_of_file_that_you_had_compiled_before
 ```
 
 For example (continue with the before compilation):
@@ -84,5 +89,5 @@ By default, when you run the code, this show the `omp_get_wtime`.
 
 ## References
 
-- https://gist.github.com/hackrio1/a11c8499ed68f5df6c30e53d1c3fe076
-- https://cs-fundamentals.com/tech-interview/c/difference-between-malloc-and-calloc
+- [Merge Sort algorithm in C](https://gist.github.com/hackrio1/a11c8499ed68f5df6c30e53d1c3fe076)
+- [Difference between malloc and calloc](https://cs-fundamentals.com/tech-interview/c/difference-between-malloc-and-calloc)

@@ -106,7 +106,7 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 1000000000, i, d, swap;
+    int n = 10, i, d, swap;
 
     MPI_Init(&argc, &argv);
 
