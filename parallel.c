@@ -85,7 +85,7 @@ void merge( int i, int j, int mid, List a, List aux ) {
 void merge_sort(int i, int j, List a, List aux) {
     /*
     Input: The index i and j, and the lists a and aux.
-    Description: This function implemented the divide and conquest
+    Description: This function implemented the divide and conquer
                  strategy of merge sort algorithm. It consists in 
                  divide the array a in two middles, both are sorted,
                  then is merge both middles in the merge function.

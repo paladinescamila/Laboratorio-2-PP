@@ -7,7 +7,31 @@
 
 ## Description
 
-In this folder was parallelized the mergesort algoritm
+In this folder was parallelized the mergesort algoritm, this algorithm was implemented to based on divide an conquer strategy. This algorithms takes the array, for example **A** and divide this array in two sections, the left and right side, this division is realized in the half of the array. Then, both halfs are calls recusively by the same function, and after those calls both are merge. Finally, when they are merge the result array already is sorted.
+
+### Step 1
+
+```C
+::::C
+ #!python hl_lines="3 4"
+void merge_sort(int i, int j, List a, List aux) {
+    if (j <= i) {
+        return;     // the subsection is empty or a single element
+    }
+    int mid = (i + j) / 2;
+
+    // left sub-array is a[i .. mid]
+    // right sub-array is a[mid + 1 .. j]
+    
+    merge_sort(i, mid, a, aux);     // sort the left sub-array recursively
+    merge_sort(mid + 1, j, a, aux);     // sort the right sub-array recursively
+    merge(i, j, mid, a, aux);
+}
+
+```
+!!! note
+    Esto es un ejemplo de nota (note, seealso).
+
 
 ## Process to compile
 
@@ -48,6 +72,12 @@ If you want visualize the runtime through *time*, you must put before run code t
 
 ```sh
 time make run FILE=name of file that you had compiled before
+```
+
+For example (continue with the before compilation):
+
+```sh
+time make run FILE=parallel
 ```
 
 By default, when you run the code, this show the `omp_get_wtime`.
