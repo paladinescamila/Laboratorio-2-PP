@@ -9,7 +9,7 @@
 
 In this folder was parallelized the Merge Sort algoritm, this algorithm was implemented to based on divide an conquer strategy. This algorithms takes the array, for example **A** and divide this array in two sections, the left and right side, this division is realized in the half of the array. Then, both halfs are calls recusively by the same function, and after those calls both are merge. Finally, when they are merge the result array already is sorted.
 
-### Step 1
+<!-- ### Step 1
 
 ```C
 ::::C
@@ -30,7 +30,7 @@ void merge_sort(int i, int j, List a, List aux) {
 
 ```
 !!! note
-    Esto es un ejemplo de nota (note, seealso).
+    Esto es un ejemplo de nota (note, seealso). -->
 
 
 ## Process to compile

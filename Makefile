@@ -1,6 +1,3 @@
-proof:
-	echo $1
-
 compile:
 	mpicc -o $(FILE) $(FILE).c
 
