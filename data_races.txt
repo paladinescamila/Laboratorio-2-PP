@@ -1,0 +1,16 @@
+Coderrect (hpc) 1.0.0 build 1614743351
+
+
+Analyzing /home/camila/Documentos/Laboratorio-2-PP/a.out ...
+ - ▖ [00m:00s] Loading IR From File           - ▘ [00m:00s] Loading IR From File           - ✔ [00m:00s] Loading IR From File                    
+ - ▖ [00m:00s] Running Compiler Optimization Passes           - ▘ [00m:00s] Running Compiler Optimization Passes           - ✔ [00m:00s] Running Compiler Optimization Passes                                    
+ - ▖ [00m:00s] Running Pointer Analysis           - ▘ [00m:00s] Running Pointer Analysis           - ✔ [00m:00s] Running Pointer Analysis                        
+ - ▖ [00m:00s] Building Static Happens-Before Graph           - ▘ [00m:00s] Building Static Happens-Before Graph           - ✔ [00m:00s] Building Static Happens-Before Graph                                    
+ - ▖ [00m:00s] Detecting Races           - ✔ [00m:00s] Detecting Races               
+ - ▖ [00m:00s] Scanning for additional OpenMP Regions           - ✔ [00m:00s] Scanning for additional OpenMP Regions                                      
+[0m
+----------------------------The summary of races in a.out------------------------
+No race is detected.
+
+
+No race detected

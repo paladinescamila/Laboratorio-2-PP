@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <mpi/mpi.h>
+#include <omp.h>
 
 #define MAX_SIZE 100
 

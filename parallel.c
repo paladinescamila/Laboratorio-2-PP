@@ -10,6 +10,7 @@ Source code: https://gist.github.com/hackrio1/a11c8499ed68f5df6c30e53d1c3fe076
 */
 
 #include "parallel.h"
+#include <math.h>
 
 List createList( int n ) {
     /*
@@ -106,7 +107,7 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 1000000000, i, d, swap;
+    int n = 1000, i, d, swap;
 
     MPI_Init(&argc, &argv);
 
