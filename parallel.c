@@ -107,21 +107,53 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 1000, i, d, swap;
+    int n = 100000000, i, d, swap = 123, swap1, rank, nproc;
+    List a, aux;
+    double start, end;
+
+    a = randomList(n);
+    aux = createList(n);
 
     MPI_Init(&argc, &argv);
 
-    List a, aux;
-    double start, end;
-    
-    a = randomList(n);
-    aux = createList(n);
-    
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nproc);
+
+
+    int m = n/nproc;
+    List ap, auxp;
+    ap = createList(m);
+    auxp = createList(m);
+
+    MPI_Scatter(a, n/nproc, MPI_INT, ap, n/nproc, MPI_INT, 0, MPI_COMM_WORLD);
+
+    MPI_Barrier(MPI_COMM_WORLD);
     start = MPI_Wtime();
-    merge_sort(0, n - 1, a, aux);
+    merge_sort(0, n/nproc - 1, ap, auxp);
+
+    List a1;
+    if (rank == 0){
+        a1 = createList(n);
+        for (i = 0; i < n; i++)
+            a1[i] = a[i];
+    }
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    MPI_Gather(ap, n/nproc, MPI_INT, a1, n/nproc, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (rank == 0){
+        int mid = (n - 1) / 2;
+        merge(0, n - 1, mid, a1, aux);
+        for (i = 0; i < n; i++)
+            a[i] = a1[i];
+    }
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
     end = MPI_Wtime();
 
-    printf("N:%d, %f s\n", n, end - start);
+    // printf("N:%d, %f s\n", n, end - start);
 
     MPI_Finalize();
     
