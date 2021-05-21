@@ -107,29 +107,57 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 100000000, i, d, swap = 123, swap1, rank, nproc;
-    List a, aux;
+    int n = 25, i, d, swap = 123, swap1, rank, nproc;
     double start, end;
+    List a, aux;
 
     a = randomList(n);
     aux = createList(n);
 
-    MPI_Init(&argc, &argv);
+    for (i = 0; i < n; i++)
+            printf("%d ", a[i]);
+        printf("\n");
 
+    MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &nproc);
 
-
-    int m = n/nproc;
+    int m = n/nproc, ac = 0;
+    int displacements[nproc], counts[nproc];
     List ap, auxp;
-    ap = createList(m);
-    auxp = createList(m);
 
-    MPI_Scatter(a, n/nproc, MPI_INT, ap, n/nproc, MPI_INT, 0, MPI_COMM_WORLD);
+    int temp = n % nproc;
+    for (i = 0; i < nproc; i++){
+        counts[i] = (i < temp) ? (n/nproc)+1 : (n/nproc);
+        if (i > 0){
+            displacements[i] = displacements[i-1]+counts[i-1];
+        }
+        else{
+            displacements[i] = 0;
+        }
+    }
+    ap = createList(counts[rank]);
+    auxp = createList(counts[rank]);
+
+    MPI_Scatterv(a, counts, displacements, MPI_INT, ap, counts[rank], MPI_INT, 0, MPI_COMM_WORLD);
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    printf("RANK: %d\n", rank);
+    for (i = 0; i < counts[rank]; i++)
+        printf("%d ", ap[i]);
+    printf("\n");
 
     MPI_Barrier(MPI_COMM_WORLD);
     start = MPI_Wtime();
-    merge_sort(0, n/nproc - 1, ap, auxp);
+    merge_sort(0, counts[rank]-1, ap, auxp);
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    printf("RANK MERGE: %d\n", rank);
+    for (i = 0; i < counts[rank]; i++)
+            printf("%d ", ap[i]);
+        printf("\n");
 
     List a1;
     if (rank == 0){
@@ -138,24 +166,58 @@ int main(int argc, char** argv) {
             a1[i] = a[i];
     }
 
+    printf("COUNTS\n");
+    for (i = 0; i < nproc; i++){
+            printf("%d ", counts[i]);
+    }
+    printf("\n");
+
+    printf("DISPLACEMENTS\n");
+    for (i = 0; i < nproc; i++){
+            printf("%d ", displacements[i]);
+    }
+    printf("\n");
+
+    MPI_Gatherv(ap, counts[rank], MPI_INT, a1, counts, displacements, MPI_INT, 0, MPI_COMM_WORLD);
+
     MPI_Barrier(MPI_COMM_WORLD);
 
-    MPI_Gather(ap, n/nproc, MPI_INT, a1, n/nproc, MPI_INT, 0, MPI_COMM_WORLD);
+    printf("RANK a1: %d\n", rank);
+    for (i = 0; i < n; i++)
+            printf("%d ", a1[i]);
+    printf("\n");
 
     if (rank == 0){
-        int mid = (n - 1) / 2;
-        merge(0, n - 1, mid, a1, aux);
+
+        if (nproc == 2){
+            merge(0, n-1, counts[0], a1, aux);
+        }
+        else if (nproc == 3){
+            merge(0, counts[0]+counts[1]-2, counts[0], a1, aux);
+            merge(0, n-1, counts[0]+counts[1]-2, a1, aux);
+        }
+        else if (nproc == 4){
+            merge(0, (n-1)/2, (n-1)/4, a1, aux);
+            merge((n-1)/2, n-1, 3*(n-1)/4, a1, aux);
+            merge(0, n-1, (n-1)/2, a1, aux);
+        }
+
+        // merge(0, n-1, (n-1)/2, a1, aux);
+
         for (i = 0; i < n; i++)
             a[i] = a1[i];
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-
     end = MPI_Wtime();
-
-    // printf("N:%d, %f s\n", n, end - start);
-
     MPI_Finalize();
+
+    if (rank == 0){
+        printf("N:%d, %f s\n", n, end - start);
+        for (i = 0; i < n; i++)
+            printf("%d ", a[i]);
+        printf("\n");
+    }
     
     return 0;
 }
