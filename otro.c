@@ -113,6 +113,10 @@ int main(int argc, char** argv) {
 
     a = randomList(n);
     aux = createList(n);
+
+    // for (i = 0; i < n; i++)
+    //     printf("%d ", a[i]);
+    // printf("\n");
     
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -167,6 +171,8 @@ int main(int argc, char** argv) {
             merge(0, n-1, displacements[2]-1, a1, aux);
         }
 
+        // merge(0, n-1, (n-1)/2, a1, aux);
+
         for (i = 0; i < n; i++)
             a[i] = a1[i];
     }
@@ -177,6 +183,9 @@ int main(int argc, char** argv) {
 
     if (rank == 0){
         printf("N:%d, %f s\n", n, end - start);
+        // for (i = 0; i < n; i++)
+        //     printf("%d ", a[i]);
+        // printf("\n");
     }
     
     return 0;
