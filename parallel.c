@@ -107,7 +107,7 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 25, i, d, swap = 123, swap1, rank, nproc;
+    int n = 26, i, d, swap = 123, swap1, rank, nproc;
     double start, end;
     List a, aux;
 
@@ -115,9 +115,9 @@ int main(int argc, char** argv) {
     aux = createList(n);
 
     for (i = 0; i < n; i++)
-            printf("%d ", a[i]);
-        printf("\n");
-
+        printf("%d ", a[i]);
+    printf("\n");
+    
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &nproc);
@@ -141,23 +141,8 @@ int main(int argc, char** argv) {
 
     MPI_Scatterv(a, counts, displacements, MPI_INT, ap, counts[rank], MPI_INT, 0, MPI_COMM_WORLD);
 
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    printf("RANK: %d\n", rank);
-    for (i = 0; i < counts[rank]; i++)
-        printf("%d ", ap[i]);
-    printf("\n");
-
-    MPI_Barrier(MPI_COMM_WORLD);
     start = MPI_Wtime();
     merge_sort(0, counts[rank]-1, ap, auxp);
-
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    printf("RANK MERGE: %d\n", rank);
-    for (i = 0; i < counts[rank]; i++)
-            printf("%d ", ap[i]);
-        printf("\n");
 
     List a1;
     if (rank == 0){
@@ -166,31 +151,15 @@ int main(int argc, char** argv) {
             a1[i] = a[i];
     }
 
-    printf("COUNTS\n");
-    for (i = 0; i < nproc; i++){
-            printf("%d ", counts[i]);
-    }
-    printf("\n");
-
-    printf("DISPLACEMENTS\n");
-    for (i = 0; i < nproc; i++){
-            printf("%d ", displacements[i]);
-    }
-    printf("\n");
-
     MPI_Gatherv(ap, counts[rank], MPI_INT, a1, counts, displacements, MPI_INT, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    printf("RANK a1: %d\n", rank);
-    for (i = 0; i < n; i++)
-            printf("%d ", a1[i]);
-    printf("\n");
 
     if (rank == 0){
 
         if (nproc == 2){
-            merge(0, n-1, counts[0], a1, aux);
+            merge(0, n-1, counts[0]-1, a1, aux);
         }
         else if (nproc == 3){
             merge(0, counts[0]+counts[1]-2, counts[0], a1, aux);
