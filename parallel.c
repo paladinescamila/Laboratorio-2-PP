@@ -141,8 +141,18 @@ int main(int argc, char** argv) {
 
     MPI_Scatterv(a, counts, displacements, MPI_INT, ap, counts[rank], MPI_INT, 0, MPI_COMM_WORLD);
 
+    printf("BEFORE\n");
+    for (i = 0; i < counts[rank]; i++)
+        printf("%d ", ap[i]);
+    printf("\n");
+
     start = MPI_Wtime();
     merge_sort(0, counts[rank]-1, ap, auxp);
+
+    printf("AFTER\n");
+    for (i = 0; i < counts[rank]; i++)
+        printf("%d ", ap[i]);
+    printf("\n");
 
     List a1;
     if (rank == 0){
@@ -162,8 +172,8 @@ int main(int argc, char** argv) {
             merge(0, n-1, counts[0]-1, a1, aux);
         }
         else if (nproc == 3){
-            merge(0, counts[0]+counts[1]-2, counts[0], a1, aux);
-            merge(0, n-1, counts[0]+counts[1]-2, a1, aux);
+            merge(0, counts[0]+counts[1]-1, counts[0]-1, a1, aux);
+            merge(0, n-1, counts[0]+counts[1]-1, a1, aux);
         }
         else if (nproc == 4){
             merge(0, (n-1)/2, (n-1)/4, a1, aux);
