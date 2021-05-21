@@ -107,51 +107,90 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 1000000, i, d, swap = 123, swap1, rank, nproc;
+    /*
+    n: Number of elements in the array
+    i: Iterator
+    rank: Store the id of processor that is running
+    nproc: Store the number of processors
+    */
+    int n = 1000000, i, rank, nproc;
+   
+    /* Both variables store the start time and the end time of the execution 
+       of parallel algorithm */
     double start, end;
+
+    /* The array of elements which are sorted and an auxiliary array */
     List a, aux;
 
-    a = randomList(n);
-    aux = createList(n);
+    /* Inicializate the array a with random values and the aux array is filled of 0's */
+    a = randomList( n );
+    aux = createList( n );
+
+    // for (i = 0; i < n; i++)
+    //     printf("%d ", a[i]);
+    // printf("\n");
     
+    /* Start paralelization */
+
     MPI_Init(&argc, &argv);
+    
+    // Obtain the rank of the process
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    // Obtain the number of process
     MPI_Comm_size(MPI_COMM_WORLD, &nproc);
 
-    int m = n/nproc, ac = 0;
+    // They are defined the displacements and counts arrays both with nproc size
     int displacements[nproc], counts[nproc];
+
+    /* They are created the ap and the auxp arrays which will allocate the data correspond to
+       process */
     List ap, auxp;
 
+    /* It is created the temp variable that allow de result to calculate the module nproc by n,
+       it means, it stores the numbers of partition which will have one element more than the others */
     int temp = n % nproc;
-    for (i = 0; i < nproc; i++){
-        counts[i] = (i < temp) ? (n/nproc)+1 : (n/nproc);
-        if (i > 0){
-            displacements[i] = displacements[i-1]+counts[i-1];
-        }
-        else{
-            displacements[i] = 0;
-        }
-    }
-    ap = createList(counts[rank]);
-    auxp = createList(counts[rank]);
 
+    /* This for assigns the number of elements in each partition that will be given to eacho process
+       and store the quantity in the counts array, and the displacements array store position where 
+       will be partitioned the array */
+    for ( i = 0; i < nproc; i++ ) {
+
+        /* Always the temp first partitions will have 1 element more than the others */
+        counts[i] = (i < temp) ? (n/nproc)+1 : (n/nproc);
+
+        /* This conditional assigns the position where will be partitioned by each processors */
+        if ( i > 0 ) { displacements[i] = displacements[i-1]+counts[i-1]; }
+        else{ displacements[i] = 0; }
+
+    }
+
+    /* They is created the ap and auxp arrays with store each elements that correspond to processor with rank,
+       also, this array have the same size that the value assign to each processor in the counts array */
+    ap = createList( counts[rank] );
+    auxp = createList( counts[rank] ); 
+
+    /*  */
     MPI_Scatterv(a, counts, displacements, MPI_INT, ap, counts[rank], MPI_INT, 0, MPI_COMM_WORLD);
 
+    /* Start to runtime */
     start = MPI_Wtime();
+
+    /* Sort each ap processor array */
     merge_sort(0, counts[rank]-1, ap, auxp);
 
+    /* The temporal array a1 which store the partitions returned by Gatherv function */
     List a1;
-    if (rank == 0){
-        a1 = createList(n);
-        for (i = 0; i < n; i++)
-            a1[i] = a[i];
-    }
 
+    /*  */
+    if (rank == 0){ a1 = createList(n); }
+    
+    /*  */
     MPI_Gatherv(ap, counts[rank], MPI_INT, a1, counts, displacements, MPI_INT, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-
+    /* The root process realice the merge of the partitions */
     if (rank == 0){
 
         if (nproc == 2){
@@ -167,6 +206,7 @@ int main(int argc, char** argv) {
             merge(0, n-1, displacements[2]-1, a1, aux);
         }
 
+        // Store the result in the origin array
         for (i = 0; i < n; i++)
             a[i] = a1[i];
     }
