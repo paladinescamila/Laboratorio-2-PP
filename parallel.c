@@ -107,16 +107,16 @@ void merge_sort(int i, int j, List a, List aux) {
 }
 
 int main(int argc, char** argv) {
-    int n = 26, i, d, swap = 123, swap1, rank, nproc;
+    int n = 1000000, i, d, swap = 123, swap1, rank, nproc;
     double start, end;
     List a, aux;
 
     a = randomList(n);
     aux = createList(n);
 
-    for (i = 0; i < n; i++)
-        printf("%d ", a[i]);
-    printf("\n");
+    // for (i = 0; i < n; i++)
+    //     printf("%d ", a[i]);
+    // printf("\n");
     
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -141,18 +141,8 @@ int main(int argc, char** argv) {
 
     MPI_Scatterv(a, counts, displacements, MPI_INT, ap, counts[rank], MPI_INT, 0, MPI_COMM_WORLD);
 
-    printf("BEFORE\n");
-    for (i = 0; i < counts[rank]; i++)
-        printf("%d ", ap[i]);
-    printf("\n");
-
     start = MPI_Wtime();
     merge_sort(0, counts[rank]-1, ap, auxp);
-
-    printf("AFTER\n");
-    for (i = 0; i < counts[rank]; i++)
-        printf("%d ", ap[i]);
-    printf("\n");
 
     List a1;
     if (rank == 0){
@@ -176,9 +166,9 @@ int main(int argc, char** argv) {
             merge(0, n-1, counts[0]+counts[1]-1, a1, aux);
         }
         else if (nproc == 4){
-            merge(0, (n-1)/2, (n-1)/4, a1, aux);
-            merge((n-1)/2, n-1, 3*(n-1)/4, a1, aux);
-            merge(0, n-1, (n-1)/2, a1, aux);
+            merge(0, counts[0]+counts[1]-1, counts[0]-1, a1, aux);
+            merge(displacements[2], n-1, displacements[3]-1, a1, aux);
+            merge(0, n-1, displacements[2]-1, a1, aux);
         }
 
         // merge(0, n-1, (n-1)/2, a1, aux);
@@ -193,9 +183,9 @@ int main(int argc, char** argv) {
 
     if (rank == 0){
         printf("N:%d, %f s\n", n, end - start);
-        for (i = 0; i < n; i++)
-            printf("%d ", a[i]);
-        printf("\n");
+        // for (i = 0; i < n; i++)
+        //     printf("%d ", a[i]);
+        // printf("\n");
     }
     
     return 0;
